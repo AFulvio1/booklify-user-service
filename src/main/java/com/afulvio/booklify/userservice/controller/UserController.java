@@ -1,10 +1,10 @@
-package it.afulvio.userservice.controller;
+package com.afulvio.booklify.userservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.afulvio.userservice.dto.UserDto;
-import it.afulvio.userservice.service.UserService;
+import com.afulvio.booklify.userservice.dto.UserDto;
+import com.afulvio.booklify.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,8 @@ public class UserController {
             @PathVariable("email") String email
     ){
         UserDto userDto = userService.findUserByEmail(email);
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
+
+        return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
 
     @PostMapping("/add-user")
@@ -37,7 +38,8 @@ public class UserController {
             @RequestBody UserDto userDto
     ){
         UserDto savedUser = userService.saveUser(userDto);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @Autowired

@@ -1,10 +1,9 @@
-package it.afulvio.userservice.service;
+package com.afulvio.booklify.userservice.service;
 
-import it.afulvio.userservice.dto.UserDto;
-import it.afulvio.userservice.entity.User;
-import it.afulvio.userservice.mapper.UserMapper;
-import it.afulvio.userservice.repository.UserRepository;
-import it.afulvio.userservice.util.UserUtils;
+import com.afulvio.booklify.userservice.dto.UserDto;
+import com.afulvio.booklify.userservice.entity.User;
+import com.afulvio.booklify.userservice.mapper.UserMapper;
+import com.afulvio.booklify.userservice.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,9 @@ public class UserService {
 
     public List<UserDto> findAllUsers() {
         log.info("Start finding all user");
-        return userRepository.findAll().stream().map(UserMapper.MAPPER::mapUserToUserDto).collect(Collectors.toList());
+        return userRepository.findAll().stream()
+                .map(UserMapper.MAPPER::mapUserToUserDto)
+                .collect(Collectors.toList());
     }
 
     public UserDto saveUser(UserDto userDto) {

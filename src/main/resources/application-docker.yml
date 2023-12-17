@@ -1,22 +1,6 @@
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-
-server:
-  port: 8081
-
 spring:
   application:
     name: user-service
-  profiles:
-    active: docker
-  boot:
-    message: HELLO, USER SERVICE
-  cloud:
-    config:
-      enabled: false
   datasource:
     url: jdbc:postgresql://postgres:5432/booklify
     username: postgres
@@ -25,33 +9,22 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
   main:
     web-application-type: reactive
   session:
     jdbc:
       initialize-schema: always
-  sleuth:
-    sampler:
-      probability: 1
-  zipkin:
-    base-url: http://127.0.0.1:9411/
 
-eureka:
-  instance:
-    hostname: user-service
-    preferIpAddress: true
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
-    serviceUrl:
-      defaultZone: http://service-registry:8761/eureka/
+server:
+  port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 
 logging:
   level:
-    com.netflix.discovery: DEBUG
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n [%springProfile]"
+    web: DEBUG

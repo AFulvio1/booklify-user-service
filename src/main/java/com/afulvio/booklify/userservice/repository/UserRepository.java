@@ -1,6 +1,6 @@
-package it.afulvio.userservice.repository;
+package com.afulvio.booklify.userservice.repository;
 
-import it.afulvio.userservice.entity.User;
+import com.afulvio.booklify.userservice.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,6 @@
-package it.afulvio.userservice.entity;
+package com.afulvio.booklify.userservice.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,7 +1,7 @@
-package it.afulvio.userservice.mapper;
+package com.afulvio.booklify.userservice.mapper;
 
-import it.afulvio.userservice.dto.UserDto;
-import it.afulvio.userservice.entity.User;
+import com.afulvio.booklify.userservice.dto.UserDto;
+import com.afulvio.booklify.userservice.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
