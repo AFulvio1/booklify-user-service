@@ -1,0 +1,2 @@
+INSERT INTO users (id, email, firstname, lastname, password, role, tms, start_validity, end_validity) VALUES
+    (1, 'afulvio@booklify.org', 'Antonio', 'Fulvio', 'password123', 'ADMIN', CURRENT_TIMESTAMP, '2023-01-01 00:00:00', '2023-12-31 23:59:59');

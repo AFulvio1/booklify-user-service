@@ -1,14 +1,24 @@
 package com.afulvio.booklify.userservice.controller;
 
+import com.afulvio.booklify.userservice.util.JwtUtil;
+import com.afulvio.booklify.userservice.dto.request.AuthRequest;
+import com.afulvio.booklify.userservice.dto.request.SaveUserRequest;
+import com.afulvio.booklify.userservice.dto.request.UpdateUserRequest;
+import com.afulvio.booklify.userservice.dto.response.*;
+import com.afulvio.booklify.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import com.afulvio.booklify.userservice.dto.UserDto;
-import com.afulvio.booklify.userservice.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/users")
@@ -16,34 +26,82 @@ import org.springframework.web.bind.annotation.*;
         name = "Users APIs",
         description = "Create Users, Update Users, Get Users, Delete Users"
 )
+@RequiredArgsConstructor
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    @GetMapping("/get-user/{email}")
+    private final JwtUtil jwtUtil;
+
+    @PostMapping("/login")
+    @Operation(summary = "Log in")
+    @ApiResponse(responseCode = "200", description = "HTTP Status 200 OK")
+    public ResponseEntity<AuthResponse> login(
+            @RequestBody @Valid AuthRequest authRequest,
+            UriComponentsBuilder uriBuilder
+    ) {
+        final UserDetails userDetails = userService.loadUserByUsername(authRequest.getEmail());
+        AuthResponse response = new AuthResponse(jwtUtil.generateToken(userDetails));
+        URI location = uriBuilder.path("/api/users/save")
+                .buildAndExpand(response.getToken())
+                .toUri();
+        return ResponseEntity.created(location).body(response);
+    }
+
+    @GetMapping("/get/{email}")
     @Operation(summary = "Get User by email")
     @ApiResponse(responseCode = "200", description = "HTTP Status 200 OK")
-    public ResponseEntity<UserDto> getUserByEmail(
-            @PathVariable("email") String email
+    public ResponseEntity<GetUserResponse> getByEmail(
+            @PathVariable("email")
+            @Valid @Email(message = "Email should be valid")
+            String email
     ){
-        UserDto userDto = userService.findUserByEmail(email);
-
-        return ResponseEntity.status(HttpStatus.OK).body(userDto);
+        GetUserResponse response = userService.findByEmail(email);
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/add-user")
+    @GetMapping("/get-all")
+    @Operation(summary = "Get all users")
+    @ApiResponse(responseCode = "200", description = "HTTP Status 200 OK")
+    public ResponseEntity<GetUsersResponse> getAll(){
+        GetUsersResponse response = userService.findAll();
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/save")
     @Operation(summary = "Create an User")
     @ApiResponse(responseCode = "201", description = "HTTP Status 201 CREATED")
-    public ResponseEntity<UserDto> saveUser(
-            @RequestBody UserDto userDto
+    public ResponseEntity<SaveUserResponse> save(
+            @RequestBody SaveUserRequest request,
+            UriComponentsBuilder uriBuilder
     ){
-        UserDto savedUser = userService.saveUser(userDto);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+        SaveUserResponse response = userService.save(request);
+        URI location = uriBuilder.path("/api/users/save")
+                .buildAndExpand(response.getUser().getId())
+                .toUri();
+        return ResponseEntity.created(location).body(response);
     }
 
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Delete User by ID")
+    @ApiResponse(responseCode = "200", description = "HTTP Status 200 OK")
+    public ResponseEntity<DeleteUserResponse> delete(
+            @PathVariable("id") @Valid final Long id
+    ) {
+        DeleteUserResponse response = userService.deleteById(id);
+        return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/update/{id}")
+    @Operation(summary = "Update an User")
+    @ApiResponse(responseCode = "202", description = "HTTP Status 202 OK")
+    public ResponseEntity<UpdateUserResponse> update(
+            @PathVariable Long id,
+            @RequestBody UpdateUserRequest request
+    ){
+        UpdateUserResponse response = userService.update(id, request);
+        return ResponseEntity.accepted().body(response);
+    }
+
+
 }

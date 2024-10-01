@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: "@project.artifactId@"
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:scripts/booklify-h2-ddl.sql
+      data-locations: classpath:scripts/booklify-h2-data.sql
+
+eureka:
+  client:
+    enabled: false
+  instance:
+    enabled: false

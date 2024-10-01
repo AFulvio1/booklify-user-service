@@ -1,20 +1,15 @@
 spring:
   application:
-    name: user-service
+    name: "@project.artifactId@"
   datasource:
-    url: jdbc:postgresql://postgres:5432/booklify
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: pgadmin
     driver-class-name: org.postgresql.Driver
   jpa:
-    hibernate:
-      ddl-auto: update
     show-sql: true
   main:
-    web-application-type: reactive
-  session:
-    jdbc:
-      initialize-schema: always
+    web-application-type: servlet
 
 server:
   port: 8081
@@ -25,6 +20,9 @@ management:
       exposure:
         include: '*'
 
-logging:
-  level:
-    web: DEBUG
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+    fetchRegistry: true
+    register-with-eureka: true
