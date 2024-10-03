@@ -68,7 +68,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/save")
+    @PostMapping("/add")
     @Operation(summary = "Create an User")
     @ApiResponse(responseCode = "201", description = "HTTP Status 201 CREATED")
     public ResponseEntity<SaveUserResponse> save(

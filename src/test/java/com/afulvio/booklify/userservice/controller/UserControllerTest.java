@@ -43,7 +43,7 @@ public class UserControllerTest extends BaseIntegrationTest {
     @Test
     @Order(3)
     public void save_OK() throws Exception {
-        this.mockMvc.perform(post(BASE_URL + "/save")
+        this.mockMvc.perform(post(BASE_URL + "/add")
                         .content(this.objectMapper.writeValueAsBytes(buildSaveUserRequest()))
                         .characterEncoding("utf-8")
                         .contentType(MediaTypes.HAL_JSON))
@@ -55,7 +55,7 @@ public class UserControllerTest extends BaseIntegrationTest {
     @Test
     @Order(4)
     public void save_KO() throws Exception {
-        this.mockMvc.perform(post(BASE_URL + "/save")
+        this.mockMvc.perform(post(BASE_URL + "/add")
                         .content(this.objectMapper.writeValueAsBytes(buildSaveUserRequest()))
                         .characterEncoding("utf-8")
                         .contentType(MediaTypes.HAL_JSON))

@@ -63,12 +63,13 @@ public class UserService implements UserDetailsService {
         log.info("Start saving a user");
         SaveUserResponse response = new SaveUserResponse();
         userRepository.findByEmail(request.getEmail()).ifPresentOrElse(
-                user -> {
+                entity -> {
                     throw new UserRegisteredException(LocalError.E003.getMessage());
                 },
                 () -> {
                     try {
-                        response.setUser(userMapper.entityToDTO(userRepository.save(userMapper.requestToEntity(request))));
+                        UserEntity savedEntity = userRepository.save(userMapper.requestToEntity(request));
+                        response.setUser(userMapper.entityToDTO(savedEntity));
                     } catch (Exception e) {
                         throw new UserRegisteringException(LocalError.E004.getMessage());
                     }
